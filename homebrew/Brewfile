@@ -1,0 +1,16 @@
+# Install latest zsh package
+brew "zsh"
+
+# Install more recent version of vim
+brew "vim",  args: ["--override-system-vi"]
+
+brew "trash"
+
+# Install Homebrew Cask
+brew "caskroom/cask/brew-cask"
+
+# Install Mac applications via Homebrew Cask
+cask "iterm2"
+cask "dockertoolbox"
+cask "vagrant"
+cask "java"

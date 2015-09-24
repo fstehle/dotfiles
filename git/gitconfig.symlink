@@ -1,0 +1,15 @@
+[user]
+	name = Fabian Stehle
+[include]
+	path = .gitconfig_local
+[core]
+	editor = /usr/bin/vim
+	excludesfile = ~/.gitignore
+[alias]
+	co = checkout
+	st = status
+	ci = commit
+[pull]
+	rebase = true
+[push]
+	default = simple

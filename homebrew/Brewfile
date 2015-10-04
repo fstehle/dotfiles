@@ -5,6 +5,7 @@ brew "zsh"
 brew "vim",  args: ["--override-system-vi"]
 
 brew "trash"
+brew "tree"
 
 # Install Homebrew Cask
 brew "caskroom/cask/brew-cask"

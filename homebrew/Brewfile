@@ -6,6 +6,7 @@ brew "vim",  args: ["--override-system-vi"]
 
 brew "trash"
 brew "tree"
+brew "pwgen"
 
 # Install Homebrew Cask
 brew "caskroom/cask/brew-cask"

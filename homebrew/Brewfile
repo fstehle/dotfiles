@@ -9,6 +9,9 @@ brew "tree"
 brew "pwgen"
 brew "tig"
 
+# Install XQuartz
+brew "caskroom/cask/xquartz"
+
 # Install Homebrew Cask
 brew "caskroom/cask/brew-cask"
 

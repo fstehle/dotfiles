@@ -1,0 +1,15 @@
+export DOTFILES=$HOME/.dotfiles
+
+config_files=($DOTFILES/**/*.zsh)
+
+for file in ${config_files}
+do
+  source $file
+done
+
+unset config_files
+
+if [[ -a ~/.localrc ]]
+then
+  source ~/.localrc
+fi

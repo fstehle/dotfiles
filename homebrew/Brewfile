@@ -1,22 +1,9 @@
-# Install latest zsh package
-brew "zsh"
+brew "ag"
 
-# Install more recent version of vim
-brew "vim",  args: ["--override-system-vi"]
-
-brew "trash"
 brew "tree"
 brew "pwgen"
-brew "tig"
-
-# Install XQuartz
-brew "caskroom/cask/xquartz"
-
-# Install Homebrew Cask
-brew "caskroom/cask/brew-cask"
 
 # Install Mac applications via Homebrew Cask
 cask "iterm2"
-cask "dockertoolbox"
-cask "vagrant"
 cask "java"
+cask "xquartz"

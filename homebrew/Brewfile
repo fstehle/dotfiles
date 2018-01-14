@@ -1,7 +1,7 @@
 brew "ag"
-
-brew "tree"
+brew "hub"
 brew "pwgen"
+brew "tree"
 
 # Install Mac applications via Homebrew Cask
 cask "iterm2"

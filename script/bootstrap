@@ -114,6 +114,14 @@ install_dotfiles () {
   done
 }
 
+bootstrap () {
+    for bootstrap in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name 'bootstrap.sh')
+    do
+      source "${bootstrap}"
+    done
+}
+
+bootstrap
 install_dotfiles
 
 echo ''

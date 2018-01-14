@@ -5,8 +5,9 @@
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd)
 
-echo "Setup virtualenv in ~/.venv"
-virtualenv --no-site-packages --python=python2.7 ~/.venv
+curl -O https://bootstrap.pypa.io/get-pip.py
+python3 get-pip.py --user
+rm get-pip.py
 
 echo "Installing python packages in virtualenv ~/.venv"
-cd $DOTFILES_ROOT/python && ~/.venv/bin/pip install -r requirements.txt
+cd $DOTFILES_ROOT/python && sudo pip3 install -r requirements.txt

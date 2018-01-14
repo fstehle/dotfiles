@@ -1,5 +1,6 @@
 brew "ag"
 brew "hub"
+brew "python3"
 brew "pwgen"
 brew "tree"
 

@@ -5,6 +5,7 @@ brew "pwgen"
 brew "tree"
 
 # Install Mac applications via Homebrew Cask
+cask "aerial"
 cask "iterm2"
 cask "java"
 cask "xquartz"

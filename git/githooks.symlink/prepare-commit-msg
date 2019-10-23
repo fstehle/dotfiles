@@ -1,0 +1,49 @@
+#!/usr/bin/env python2
+#
+# Git hook to automatically prefix commit messages with a ticket number if the branch starts with a ticket number
+#
+# Example
+# Branch name: AB-123-something
+# Commit message: [AB-123] My commit message
+
+import sys, re
+from subprocess import check_output, CalledProcessError
+
+commit_msg_filepath = sys.argv[1]
+
+def get_issue():
+    try:
+        branch = check_output(['git', 'symbolic-ref', '--short', 'HEAD']).strip()
+    except CalledProcessError:
+        return None
+    regex = '^(\w+-\d+)'
+    issue = None
+    if re.match(regex, branch):
+        issue = re.match(regex, branch).group(1)
+    return issue
+
+def get_commit_msg():
+    with open(commit_msg_filepath, 'ro') as fh:
+        commit_msg = fh.read()
+        return commit_msg
+    return None
+
+def prefix_commit_msg(commit_msg, issue):
+    with open(commit_msg_filepath, 'w') as fh:
+        fh.write('[%s] %s' % (issue, commit_msg))
+
+issue = get_issue()
+if issue is None:
+    # No issue found in branch
+    sys.exit(0)
+
+print 'Detected issue %s' % issue
+
+commit_msg = get_commit_msg()
+if '[%s]' % issue in commit_msg:
+    # Commit message alreday contains issue
+    sys.exit(0)
+
+print 'Prefix commit message with [%s]' % issue
+
+prefix_commit_msg(commit_msg, issue)

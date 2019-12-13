@@ -5,6 +5,7 @@
 [core]
 	editor = /usr/bin/vim
 	excludesfile = ~/.gitignore
+	hooksPath = ~/.githooks
 [alias]
 	co = checkout
 	st = status

@@ -1,5 +1,8 @@
 brew "ag"
 brew "hub"
+brew "gnupg"
+brew "gpg2"
+brew "pinentry-mac"
 brew "python3"
 brew "pwgen"
 brew "tree"

@@ -18,3 +18,5 @@ install_vim_plugins() {
 
 echo "Installing vim plugins...."
 install_vim_plugins
+
+echo ''

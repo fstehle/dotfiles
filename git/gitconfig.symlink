@@ -15,5 +15,3 @@
 	rebase = true
 [push]
 	default = simple
-[commit]
-    gpgsign = true

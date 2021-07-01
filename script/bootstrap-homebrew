@@ -1,25 +1,22 @@
 #!/usr/bin/env bash
 #
-# Install command-line tools using Homebrew.
+# bootstrap installs things.
 
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd)
 
-# Ask for the administrator password upfront.
-sudo -v
+set -e
 
-# Keep-alive: update existing `sudo` time stamp until the script has finished.
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+echo ''
 
-# Make sure we’re using the latest Homebrew.
-brew update
+brew_install () {
+    for brewfile in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name 'Brewfile'); do
+        brew bundle --file "${brewfile}"
+    done
+}
 
-# Upgrade any already-installed formulae.
-brew upgrade
+echo "Installing homebrew packages..."
+brew_install
 
-brew tap homebrew/bundle
-echo "Installing packages from homebrew"
-cd $DOTFILES_ROOT/homebrew && brew bundle
-
-# Remove outdated versions from the cellar.
-brew cleanup
+echo ''
+echo '  All installed!'

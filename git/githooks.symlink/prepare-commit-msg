@@ -1,19 +1,22 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #
-# Git hook to automatically prefix commit messages with a ticket number if the branch starts with a ticket number
+# Git hook to automatically suffix or prefix commit messages with a ticket number if the branch starts with a ticket number
 #
 # Example
 # Branch name: AB-123-something
 # Commit message: [AB-123] My commit message
 
 import sys, re
-from subprocess import check_output, CalledProcessError
+from subprocess import check_output, CalledProcessError, getoutput
+import subprocess
 
 commit_msg_filepath = sys.argv[1]
 
+# Get issue from branch name (eg. TASK-123-...)
 def get_issue():
     try:
-        branch = check_output(['git', 'symbolic-ref', '--short', 'HEAD']).strip()
+        branch = check_output(['git', 'symbolic-ref', '--short',
+                               'HEAD'],  encoding='UTF-8', stderr=subprocess.PIPE).strip()
     except CalledProcessError:
         return None
     regex = '^(\w+-\d+)'
@@ -22,28 +25,67 @@ def get_issue():
         issue = re.match(regex, branch).group(1)
     return issue
 
+# Get commit message from git
 def get_commit_msg():
-    with open(commit_msg_filepath, 'ro') as fh:
+    with open(commit_msg_filepath, 'r', encoding="utf-8") as fh:
         commit_msg = fh.read()
         return commit_msg
     return None
 
+# Add issue as suffix to a commit message (on the first line)
+# An optional prefix can also be provided
+# "My commit msg" -> "feat: My commit msg [TASK-123]"
+def suffix_commit_msg(commit_msg, issue, prefix=''):
+    with open(commit_msg_filepath, 'w') as fh:
+        commit_msg_parts = commit_msg.split("\n")
+        if len(commit_msg_parts) > 0:
+            commit_msg_parts[0] = '%s%s [%s]' % (prefix, commit_msg_parts[0], issue)
+        commit_msg = "\n".join(commit_msg_parts)
+        fh.write(commit_msg)
+
+# Add issue as prefix to a commit message
+# "My commit msg" -> "[TASK-123] My commit msg"
 def prefix_commit_msg(commit_msg, issue):
     with open(commit_msg_filepath, 'w') as fh:
-        fh.write('[%s] %s' % (issue, commit_msg))
+        commit_msg = '[%s] %s' % (issue, commit_msg)
+        fh.write(commit_msg)
+
+# Get github repository name from remote url of origin
+# git@github.com:my-org/my-repo.git -> my-repo
+def get_github_repository_name():
+    try:
+        remote_origin_url = check_output(['git', 'config', '--get', 'remote.origin.url'], encoding='UTF-8', stderr=subprocess.PIPE).strip()
+    except CalledProcessError:
+        return None
+
+    try:
+        repo_name = check_output(['basename', '-s', '.git', remote_origin_url],  encoding='UTF-8', stderr=subprocess.PIPE).strip()
+    except CalledProcessError:
+        return None
+    return repo_name
+
+
 
 issue = get_issue()
 if issue is None:
     # No issue found in branch
     sys.exit(0)
 
-print 'Detected issue %s' % issue
-
 commit_msg = get_commit_msg()
 if '[%s]' % issue in commit_msg:
     # Commit message alreday contains issue
+    print('No issue detected')
     sys.exit(0)
 
-print 'Prefix commit message with [%s]' % issue
+print('Detected issue %s' % issue)
 
-prefix_commit_msg(commit_msg, issue)
+repo_name = get_github_repository_name()
+if repo_name == 'my-repo':
+    print('Suffix commit message with [%s] and prefix "feat:"' % issue)
+    suffix_commit_msg(commit_msg, issue, "feat: ")
+else:
+    print('Prefix commit message with [%s]' % issue)
+    prefix_commit_msg(commit_msg, issue)
+
+
+
